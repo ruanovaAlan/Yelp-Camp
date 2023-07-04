@@ -9,6 +9,7 @@
 
 <body>
     <h1>All Campgrounds</h1>
+    <a href="/campgrounds/new">Add Campground</a>
     <ul>
         <% for(let campground of campgrounds){ %>
             <a href="campgrounds/<%= campground._id %>">
@@ -18,7 +19,7 @@
             </a>
             <% } %>
     </ul>
-    <a href="/campgrounds/new">Add Campground</a>
+
 </body>
 
 </html>
