@@ -19,15 +19,34 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+//Set the url encoded to parse the body
+app.use(express.urlencoded({ extended: true }));
+
 app.get('/', (req, res) => { //home page
     res.render('home')
 })
 
-app.get('/makecampground', async (req, res) => {
-    const camp = new Campground({ title: 'My backyard', description: 'Cheap' });
-    await camp.save();
-    res.send(camp)
+app.get('/campgrounds', async (req, res) => { //Show all campgrounds
+    const campgrounds = await Campground.find({});
+    res.render('campgrounds/index', { campgrounds });
 })
+
+app.get('/campgrounds/new', (req, res) => { //Add new campgrounds
+    res.render('campgrounds/new')
+})
+
+app.post('/campgrounds', async (req, res) => { //post a new camp to the db
+    const campground = new Campground(req.body.campground);
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+})
+
+app.get('/campgrounds/:id', async (req, res) => { //Show a specific camp
+    const campground = await Campground.findById(req.params.id);
+    res.render('campgrounds/show', { campground });
+})
+
+
 
 
 app.listen(3000, () => {
