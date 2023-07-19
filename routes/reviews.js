@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router({ mergeParams: true }); //Allows us to use all params
+const router = express.Router({ mergeParams: true }); //Allows us to use all params 
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/expressError');
 const Campground = require("../models/campground");
@@ -26,6 +26,7 @@ router.post('/', validateReview, catchAsync(async (req, res) => {
     campground.reviews.push(review);
     await review.save();
     await campground.save();
+    req.flash('success', 'Review created successfully!');
     res.redirect(`/campgrounds/${campground._id}`);
 }));
 
@@ -35,6 +36,7 @@ router.delete('/:reviewId', catchAsync(async (req, res) => {
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
     //$pull removes a specified document from an array
     await Review.findById(reviewId);
+    req.flash('success', 'Review deleted successfully!');
     res.redirect(`/campgrounds/${id}`);
 }));
 
