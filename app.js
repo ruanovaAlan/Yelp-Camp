@@ -5,7 +5,10 @@ const ejsMate = require("ejs-mate");
 const ExpressError = require('./utils/expressError');
 const methodOverride = require("method-override");
 const session = require('express-session');
-const flash = require('connect-flash')
+const flash = require('connect-flash');
+const passport = require('passport');
+const passportLocal = require('passport-local');
+const User = require('./models/user');
 
 const campgrounds = require('./routes/campgrounds');
 const reviews = require('./routes/reviews');
@@ -49,6 +52,13 @@ const sessionConfig = {
 app.use(session(sessionConfig))
 //flash 
 app.use(flash());
+//passport
+app.use(passport.initialize());
+app.use(passport.session()); //this line needs to be below "app.use(session(sessionConfig))"
+passport.use(new passportLocal(User.authenticate())); //Tell passport we want to use a local strategy and 
+// for this strategy we want to authenticate User
+passport.serializeUser(User.serializeUser()); //how do we store data in session
+passport.deserializeUser(User.deserializeUser()); //how do we get a user out of the serialization
 
 //Middleware
 app.use((req, res, next) => { //Flash 
