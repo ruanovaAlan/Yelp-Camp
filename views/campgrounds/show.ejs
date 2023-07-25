@@ -16,8 +16,8 @@
                     <li class="list-group-item text-muted">
                         <%= campground.location %>
                     </li>
-                    <li class="list-group-item text-muted">
-                        Submited by: <%= campground.author.username %>
+                    <li class="list-group-item">
+                        Submited by <%= campground.author.username %>
                     </li>
                     <li class="list-group-item">$<%= campground.price %>/night</li>
                 </ul>
@@ -35,33 +35,41 @@
 
 
         <div class="col-6">
-            <h2>Leave a Review</h2>
-            <form action="/campgrounds/<%= campground._id %>/reviews" method="POST" class="mb-3 needs-validation"
-                novalidate>
-                <div class="mb-3">
-                    <label class="form-label" for="rating">Rating</label>
-                    <input class="form-range" type="range" name="review[rating]" id="rating" min="1" max="5">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="body">Review</label>
-                    <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
-                    <div class="valid-feedback">Looks good!</div>
-                </div>
-                <button class="btn btn-success">Submit</button>
-            </form>
-            <% for(let review of campground.reviews) { %>
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Rating: <%= review.rating %>
-                        </h5>
-                        <p class="card-text">Review: <%= review.body%>
-                        </p>
-                        <form action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=DELETE"
-                            method="post">
-                            <button class="btn btn-sm btn-danger">Delete</button>
-                        </form>
+            <% if(currentUser) { %>
+                <h2>Leave a Review</h2>
+                <form action="/campgrounds/<%= campground._id %>/reviews" method="POST" class="mb-3 needs-validation"
+                    novalidate>
+                    <div class="mb-3">
+                        <label class="form-label" for="rating">Rating</label>
+                        <input class="form-range" type="range" name="review[rating]" id="rating" min="1" max="5">
                     </div>
-                </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="body">Review</label>
+                        <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3"
+                            required></textarea>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                    <button class="btn btn-success">Submit</button>
+                </form>
                 <% } %>
+                    <% for(let review of campground.reviews) { %>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Rating: <%= review.rating %>
+                                        <h6 class="card-subtitle mb-2 text-muted">By <%= review.author.username %>
+                                        </h6>
+                                </h5>
+                                <p class="card-text">Review: <%= review.body%>
+                                </p>
+                                <% if(currentUser && review.author.equals(currentUser._id)) { %>
+                                    <form
+                                        action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=DELETE"
+                                        method="post">
+                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                    <% } %>
+                            </div>
+                        </div>
+                        <% } %>
         </div>
     </div>
