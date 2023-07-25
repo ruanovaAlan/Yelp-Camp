@@ -1,4 +1,4 @@
-const { campgroundSchema } = require('./schemas.js'); //Not a mongoose schema
+const { campgroundSchema, reviewSchema } = require('./schemas.js'); //Not a mongoose schema
 const ExpressError = require('./utils/expressError.js');
 const Campground = require("./models/campground");
 
@@ -37,5 +37,16 @@ module.exports.isAuthor = async (req, res, next) => {
         return res.redirect(`/campgrounds/${id}`);
     }
     next();
+}
+
+//reviews
+module.exports.validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400);
+    } else {
+        next();
+    }
 }
 
