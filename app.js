@@ -13,6 +13,7 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const passportLocal = require('passport-local');
 const User = require('./models/user');
+const mongoSanitize = require('express-mongo-sanitize');
 
 const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
@@ -64,6 +65,8 @@ passport.use(new passportLocal(User.authenticate())); //Tell passport we want to
 // for this strategy we want to authenticate User
 passport.serializeUser(User.serializeUser()); //how do we store data in session
 passport.deserializeUser(User.deserializeUser()); //how do we get a user out of the serialization
+//Mongo sanitize
+app.use(mongoSanitize());
 
 //Middleware
 app.use((req, res, next) => { //Flash 
