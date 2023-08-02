@@ -1,15 +1,30 @@
 <% layout('layouts/boilerplate') %>
-    <h1>Login</h1>
-    <form action="/login" class="needs-validation" method="post" novalidate>
-        <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" name="username" id="username" class="form-control" required />
-            <div class="valid-feedback">Looks good!</div>
+<!-- <div class="container d-flex  align-items-center mt-5"> -->
+<div class="row justify-content-center mb-5">
+    <div class="col-md-6 col-xl-5 col-sm-8">
+        <div class="card shadow">
+            <img src="https://images.unsplash.com/photo-1464547323744-4edd0cd0c746?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
+                alt="" class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title">Login</h5>
+                <form action="/login" class="needs-validation" method="post" novalidate>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" name="username" id="username" class="form-control" required autofocus>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" name="password" id="password" class="form-control" required>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success">Login</button>
+                    </div>
+
+                </form>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" name="password" id="password" class="form-control" required />
-            <div class="valid-feedback">Looks good!</div>
-        </div>
-        <button class="btn btn-success">Login</button>
-    </form>
+    </div>
+</div>
+<!-- </div> -->
