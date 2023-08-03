@@ -46,11 +46,13 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, 'public')));
 //session
 const sessionConfig = {
+    name: 'session',
     secret: 'thisShouldBeSecret',
     resave: false, //erase deprecation warning 
     saveUninitialized: true, //erase deprecation warning 
     cookie: { //especify options for cookies
         httpOnly: true,
+        // secure: true, //this is for the deployment 
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7, //miliseconds, seconds, hours, hours-per-day, days-week
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
