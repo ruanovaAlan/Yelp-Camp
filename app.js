@@ -15,6 +15,7 @@ const passportLocal = require('passport-local');
 const User = require('./models/user');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet')
+const MongoStore = require('connect-mongo');
 
 const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
@@ -22,7 +23,11 @@ const userRoutes = require('./routes/users');
 
 
 //Connection to mongoose
-mongoose.connect("mongodb://127.0.0.1:27017/yelp-camp");
+//"mongodb://127.0.0.1:27017/yelp-camp"
+//mongoose.connect(dbUrl); //cloud database
+//const dbUrl = process.env.DB_URL;
+const dbUrl = "mongodb://127.0.0.1:27017/yelp-camp";
+mongoose.connect(dbUrl); //local database
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Connection erro:"));
@@ -45,8 +50,21 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 //Set the route for the public directory
 app.use(express.static(path.join(__dirname, 'public')));
+
+//Mongo store
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret: 'thisIsASecret'
+    }
+})
+store.on("error", function(e) {
+    console.log("Session store error")
+})
 //session
 const sessionConfig = {
+    store,
     name: 'session',
     secret: 'thisShouldBeSecret',
     resave: false, //erase deprecation warning 
