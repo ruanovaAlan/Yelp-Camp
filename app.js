@@ -72,7 +72,7 @@ const sessionConfig = {
     saveUninitialized: true, //erase deprecation warning 
     cookie: { //especify options for cookies
         httpOnly: true,
-        secure: true, //this is for the deployment 
+        //secure: true, //this is for the deployment 
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7, //miliseconds, seconds, hours, hours-per-day, days-week
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
