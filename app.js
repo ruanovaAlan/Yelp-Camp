@@ -26,7 +26,7 @@ const userRoutes = require('./routes/users');
 //"mongodb://127.0.0.1:27017/yelp-camp"
 //mongoose.connect(dbUrl); //cloud database
 //const dbUrl = process.env.DB_URL;
-const dbUrl = "mongodb://127.0.0.1:27017/yelp-camp";
+const dbUrl = process.env.DB_URL || "mongodb://127.0.0.1:27017/yelp-camp";
 mongoose.connect(dbUrl); //local database
 
 const db = mongoose.connection;
@@ -52,11 +52,12 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Mongo store
+const secret = process.env.SECRET || 'thisShouldBeSecret'
 const store = MongoStore.create({
     mongoUrl: dbUrl,
     touchAfter: 24 * 60 * 60,
     crypto: {
-        secret: 'thisIsASecret'
+        secret
     }
 })
 store.on("error", function(e) {
@@ -66,7 +67,7 @@ store.on("error", function(e) {
 const sessionConfig = {
     store,
     name: 'session',
-    secret: 'thisShouldBeSecret',
+    secret,
     resave: false, //erase deprecation warning 
     saveUninitialized: true, //erase deprecation warning 
     cookie: { //especify options for cookies
@@ -173,6 +174,7 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render('error', { err });
 })
 
+const port = process.env.PORT || 3000; // for heroku 
 app.listen(3000, () => {
-    console.log("Serving in port 3000");
+    console.log(`Serving on port ${port}`);
 });
