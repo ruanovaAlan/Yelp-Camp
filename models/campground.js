@@ -3,8 +3,11 @@ const Review = require('./review');
 const Schema = mongoose.Schema;
 
 const imageSchema = new Schema({
-    url: String,
-    filename: String
+    url: {
+        type: String,
+        default: 'https://res.cloudinary.com/dmt9srumx/image/upload/v1691437689/YelpCamp/default_mhzpvl.jpg'
+    },
+    filename: String,
 });
 
 imageSchema.virtual('thumbnail').get(function () {
