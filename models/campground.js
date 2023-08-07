@@ -4,10 +4,7 @@ const Schema = mongoose.Schema;
 
 const imageSchema = new Schema({
     url: String,
-    filename: {
-        type: String,
-        default: 'default_mhzpvl.jpg'
-    }
+    filename: String,
 });
 
 imageSchema.virtual('thumbnail').get(function () {
